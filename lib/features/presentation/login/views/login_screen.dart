@@ -54,15 +54,22 @@ class LoginScreen extends StatelessWidget {
               SizedBox(height: 30),
 
               CusstomButton(
-                onPressed: () {
+                onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    Login().login(
-                      userNmae: userNameConroller.text,
+                    final success = Login().login(
+                      username: userNameConroller.text,
                       password: passwordController.text,
                     );
-                    print(userNameConroller.text);
 
-                    Navigator.pushNamed(context, HomeScreen.id);
+                    if (await success) {
+                      Navigator.pushNamed(context, HomeScreen.id);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Invalid username or password"),
+                        ),
+                      );
+                    }
                   }
                 },
                 title: "Login",
